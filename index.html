@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Record Layout Visualizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>C++ Record Layout Visualizer</h1>
+                    <p>Analyze and visualize C++ struct/class memory layouts</p>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div class="input-panel">
+                <div class="panel-title">C++ Source Code</div>
+                <textarea id="codeEditor" class="code-editor" placeholder="Enter your C++ struct/class definitions here...">struct S { 
+    int a; 
+    float b; 
+    class N {
+        double arr[2];
+    } n;
+};
+
+class A {
+    char c;
+};
+
+class B : public A {
+    double arr[3];
+protected:
+    virtual ~B() {}
+};
+
+class C : public A, public B {
+    int n;
+    B* (*f)(A*, B*);
+};
+
+class Packed {
+    char c;
+    double d;
+    int i;
+} __attribute__((__packed__));
+
+class Padded {
+    char c;
+} __attribute__((__aligned__(16)));</textarea>
+
+                <div class="controls">
+                    <button id="analyzeBtn" class="analyze-btn">Analyze Layout</button>
+                    <select id="targetSelect" class="target-select">
+                        <option value="--target=x86_64-pc-linux-gnu">x86_64 Linux</option>
+                        <option value="--target=i386-pc-linux-gnu">i386 Linux</option>
+                        <option value="--target=arm-linux-gnueabi">ARM Linux</option>
+                        <option value="--target=aarch64-linux-gnu">AArch64 Linux</option>
+                    </select>
+                    <div id="loading" class="loading">Analyzing...</div>
+                </div>
+
+                <div id="error" class="error"></div>
+                
+                <div id="infoPanel" class="info-panel" style="display: none;">
+                    <div class="info-header">
+                        <span>Compiler Output</span>
+                        <button id="clearInfo" class="clear-btn" title="Clear output">×</button>
+                    </div>
+                    <div id="infoContent" class="info-content"></div>
+                </div>
+            </div>
+
+            <div class="output-panel">
+                <div class="panel-title">Layout Visualization</div>
+                
+                <div id="recordList" class="record-list" style="display: none;">
+                    <div class="record-list-header">Records:</div>
+                    <div class="record-items"></div>
+                </div>
+
+                <div id="layoutVisualization" class="layout-visualization">
+                    <div style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+                        Enter C++ code and click "Analyze Layout" to see the memory layout visualization.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update theme icon
+            const themeIcon = document.querySelector('.theme-icon');
+            themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // Initialize theme on page load
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            
+            document.documentElement.setAttribute('data-theme', theme);
+            const themeIcon = document.querySelector('.theme-icon');
+            themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // Initialize theme when DOM loads
+        document.addEventListener('DOMContentLoaded', initializeTheme);
+    </script>
+    <script type="module" src="dist/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+    "name": "cxxlayout",
+    "version": "0.1.0",
+    "description": "C++ Record Layout Visualizer - Analyze and visualize C++ struct/class memory layouts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "serve": "npx serve -s . -p 8080",
+        "start": "npm run build && npm run serve",
+        "demo": "npm run build && npm run serve"
+    },
+    "keywords": ["c++", "memory-layout", "struct", "class", "visualization", "clang"],
+    "author": "Iris Shi",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/emscripten": "^1.40.1",
+        "typescript": "^5.0.0",
+        "serve": "^14.0.0"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}
